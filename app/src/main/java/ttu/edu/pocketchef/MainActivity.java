@@ -1,5 +1,6 @@
 package ttu.edu.pocketchef;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,9 +13,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ViewFlipper;
+
+import ttu.edu.pocketchef.fragments.AddRecipeFragment;
+import ttu.edu.pocketchef.fragments.HomeFragment;
+import ttu.edu.pocketchef.fragments.SearchFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        HomeFragment.OnFragmentInteractionListener,
+        SearchFragment.OnFragmentInteractionListener,
+        AddRecipeFragment.OnFragmentInteractionListener {
+
+    private ViewFlipper vf;
+    private HomeFragment homeFragment;
+    private AddRecipeFragment addRecipeFragment;
+    private SearchFragment searchFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,15 +36,6 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -40,6 +45,26 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        vf = (ViewFlipper)findViewById(R.id.vf);
+
+        homeFragment = new HomeFragment();
+        homeFragment.setArguments(new Bundle());
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_home, homeFragment)
+                .commit();
+
+        searchFragment = new SearchFragment();
+        searchFragment.setArguments(new Bundle());
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_search, searchFragment)
+                .commit();
+
+        addRecipeFragment = new AddRecipeFragment();
+        addRecipeFragment.setArguments(new Bundle());
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_add_recipe, addRecipeFragment)
+                .commit();
     }
 
     @Override
@@ -62,7 +87,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
+        // automatically handle clicks on the HomeFragment/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
@@ -80,22 +105,31 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_home) {
+            vf.setDisplayedChild(0);
+        } else if (id == R.id.nav_search) {
+            vf.setDisplayedChild(1);
+        } else if (id == R.id.nav_add) {
+            vf.setDisplayedChild(2);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onHomeFragmentInteraction() {
+
+    }
+
+    @Override
+    public void onSearchFragmentInteraction() {
+
+    }
+
+    @Override
+    public void onAddRecipeFragmentInteraction() {
+
     }
 }

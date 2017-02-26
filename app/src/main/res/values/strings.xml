@@ -5,4 +5,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello home fragment</string>
+    <string name="hello_search_fragment">Hello search fragment</string>
+    <string name="hello_add_fragment">Hello add recipe fragment</string>
 </resources>
