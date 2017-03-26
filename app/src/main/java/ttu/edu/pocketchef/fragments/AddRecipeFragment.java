@@ -4,11 +4,15 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import ttu.edu.pocketchef.R;
+import ttu.edu.pocketchef.content.DB;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,7 +37,27 @@ public class AddRecipeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_recipe, container, false);
+        final View v = inflater.inflate(R.layout.fragment_add_recipe, container, false);
+
+        Button b = (Button)v.findViewById(R.id.add_recipe_save);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText name = (EditText)v.findViewById(R.id.add_recipe_name);
+
+                DB.getDB().execSQL("INSERT INTO Recipe (Name) VALUES ('" + name.getText().toString() + "')");
+
+                DB.dumpRecipes();
+
+                name.setText("");
+
+                if (mListener != null) {
+                    mListener.onAddRecipeFragmentInteraction(true);
+                }
+            }
+        });
+
+        return v;
     }
 
     @Override
@@ -65,6 +89,6 @@ public class AddRecipeFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onAddRecipeFragmentInteraction();
+        void onAddRecipeFragmentInteraction(boolean saved);
     }
 }

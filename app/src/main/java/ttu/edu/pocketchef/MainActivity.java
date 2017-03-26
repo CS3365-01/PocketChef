@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,6 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ViewFlipper;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+
+import ttu.edu.pocketchef.content.DB;
 import ttu.edu.pocketchef.fragments.AddRecipeFragment;
 import ttu.edu.pocketchef.fragments.HomeFragment;
 import ttu.edu.pocketchef.fragments.SearchFragment;
@@ -65,6 +71,9 @@ public class MainActivity extends AppCompatActivity
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container_add_recipe, addRecipeFragment)
                 .commit();
+
+
+        DB.create(getResources(), getApplicationContext().getCacheDir());
     }
 
     @Override
@@ -129,7 +138,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onAddRecipeFragmentInteraction() {
+    public void onAddRecipeFragmentInteraction(boolean saved) {
+        vf.setDisplayedChild(0);
 
+        homeFragment.refreshHome();
     }
 }
