@@ -38,6 +38,7 @@ public class AddRecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_add_recipe, container, false);
+        final View d = inflater.inflate(R.layout.fragment_add_recipe, container, false);
 
         Button b = (Button)v.findViewById(R.id.add_recipe_save);
         b.setOnClickListener(new View.OnClickListener() {
@@ -50,6 +51,24 @@ public class AddRecipeFragment extends Fragment {
                 DB.dumpRecipes();
 
                 name.setText("");
+
+                if (mListener != null) {
+                    mListener.onAddRecipeFragmentInteraction(true);
+                }
+            }
+        });
+
+        Button dd = (Button)d.findViewById(R.id.add_recipe_save);
+        dd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText description = (EditText)v.findViewById(R.id.add_recipe_name);
+
+                DB.getDB().execSQL("INSERT INTO Recipe (Description) VALUES ('" + description.getText().toString() + "')");
+
+                DB.dumpRecipes();
+
+                description.setText("");
 
                 if (mListener != null) {
                     mListener.onAddRecipeFragmentInteraction(true);
