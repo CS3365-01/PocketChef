@@ -53,12 +53,13 @@ public class HomeFragment extends Fragment {
         Cursor c = DB.getDB().rawQuery(selectQuery, null);
         while (c.moveToNext()) {
             String name = c.getString(c.getColumnIndex("Name"));
+            String description = c.getString(c.getColumnIndex("Description"));
             final int id = c.getInt(c.getColumnIndex("ID"));
 
             ViewGroup card = (ViewGroup)inflater.inflate(R.layout.card_home, null);
-            ViewGroup ll = (ViewGroup)card.getChildAt(0);
-            TextView title = (TextView)ll.getChildAt(0);
-            final FloatingActionButton fab = (FloatingActionButton)ll.getChildAt(1);
+            TextView title = (TextView)card.findViewById(R.id.home_card_title);
+            TextView desc = (TextView)card.findViewById(R.id.home_card_description);
+            final FloatingActionButton fab = (FloatingActionButton)card.findViewById(R.id.home_card_fab);
 
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -69,6 +70,7 @@ public class HomeFragment extends Fragment {
 
             //TextView title = (TextView)card.findViewById(R.id.home_card_title);
             title.setText(name);
+            desc.setText(description);
 
             llmain.addView(card);
         }

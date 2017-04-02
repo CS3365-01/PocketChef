@@ -1,6 +1,8 @@
 package ttu.edu.pocketchef.fragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -45,33 +47,26 @@ public class AddRecipeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 EditText name = (EditText)v.findViewById(R.id.add_recipe_name);
+                EditText desc = (EditText)v.findViewById(R.id.add_recipe_description);
 
-                DB.getDB().execSQL("INSERT INTO Recipe (Name) VALUES ('" + name.getText().toString() + "')");
+                if (name.getText().toString().equals("")) {
+                    new AlertDialog.Builder(getContext())
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle("Error")
+                            .setMessage("The recipe name can not be empty.")
+                            .setPositiveButton("Ok", null)
+                            .show();
+                } else {
+                    DB.getDB().execSQL("INSERT INTO Recipe (Name, Description) VALUES ('" + name.getText().toString() + "', '" + desc.getText().toString() + "')");
 
-                DB.dumpRecipes();
+                    DB.dumpRecipes();
 
-                name.setText("");
+                    name.setText("");
+                    desc.setText("");
 
-                if (mListener != null) {
-                    mListener.onAddRecipeFragmentInteraction(true);
-                }
-            }
-        });
-
-        Button dd = (Button)d.findViewById(R.id.add_recipe_save);
-        dd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                EditText description = (EditText)v.findViewById(R.id.add_recipe_name);
-
-                DB.getDB().execSQL("INSERT INTO Recipe (Description) VALUES ('" + description.getText().toString() + "')");
-
-                DB.dumpRecipes();
-
-                description.setText("");
-
-                if (mListener != null) {
-                    mListener.onAddRecipeFragmentInteraction(true);
+                    if (mListener != null) {
+                        mListener.onAddRecipeFragmentInteraction(true);
+                    }
                 }
             }
         });
