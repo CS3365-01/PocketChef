@@ -7,5 +7,6 @@
     <color name="black">#000000</color>
     <color name="white">#ffffff</color>
     <color name="background">#EEEEEE</color>
+    <color name="tintedBackground">#DADADA</color>
     <color name="transparent">#00000000</color>
 </resources>

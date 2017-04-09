@@ -49,6 +49,8 @@ public class HomeFragment extends Fragment {
         LinearLayout llmain = (LinearLayout)view.findViewById(R.id.home_card_area);
         llmain.removeAllViewsInLayout();
 
+        DB.dumpRecipes();;
+
         String selectQuery = "SELECT * FROM Recipe";
         Cursor c = DB.getDB().rawQuery(selectQuery, null);
         while (c.moveToNext()) {

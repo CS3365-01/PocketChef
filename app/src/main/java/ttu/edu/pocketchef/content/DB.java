@@ -72,8 +72,22 @@ public class DB {
                 sb.append(cname + ": " + c.getString(c.getColumnIndex(cname)) + " ");
             }
             sb.append("\n");
+
+            StringBuilder isb = new StringBuilder();
+            Cursor i = getDB().rawQuery("SELECT * FROM IngredientRecipe WHERE RecipeID = " + c.getLong(c.getColumnIndex("ID")), null);
+            while (i.moveToNext()) {
+                for (String cname : i.getColumnNames()) {
+                    isb.append(cname + ": " + i.getString(i.getColumnIndex(cname)) + " ");
+                }
+                isb.append("\n\t");
+            }
+            i.close();
+
+            sb.append(isb.toString());
+
+            sb.append("\n");
         }
-        Log.i("ReciepeTable", sb.toString());
+        Log.i("RecipeTable", sb.toString());
         c.close();
     }
 }

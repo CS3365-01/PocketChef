@@ -1,15 +1,20 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background"
     tools:context="ttu.edu.pocketchef.fragments.AddRecipeFragment">
-
-    <!-- TODO: Update blank fragment layout -->
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/input_layout_password"
-        android:layout_margin="18dp"
+        android:id="@+id/input_layout_name"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -21,10 +26,14 @@
 
     </android.support.design.widget.TextInputLayout>
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/input_layout_descpassword"
-        android:layout_margin="18dp"
+        android:id="@+id/input_layout_desc"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/input_layout_name">
 
         <EditText
             android:layout_width="match_parent"
@@ -33,13 +42,135 @@
             android:hint="Description"
             android:lines="3" />
     </android.support.design.widget.TextInputLayout>
-    <Button
-        android:id="@+id/add_recipe_save"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_layout_cooktime"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_width="match_parent"
+        android:layout_below="@id/input_layout_desc"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_recipe_cooktime"
+            android:hint="Cook Time" />
+    </android.support.design.widget.TextInputLayout>
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/input_layout_source"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_width="match_parent"
+        android:layout_below="@id/input_layout_cooktime"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_recipe_source"
+            android:hint="Recipe Source" />
+    </android.support.design.widget.TextInputLayout>
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
+        android:layout_marginTop="9dp"
+        android:id="@+id/add_recipe_add_ing_text"
+        android:layout_marginLeft="18dp"
+        android:layout_below="@id/input_layout_source"
+        android:textSize="18sp"
+        android:text="Ingredients"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:layout_below="@id/input_layout_source"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_marginRight="18dp"
+        android:id="@+id/add_recipe_add_ing"/>
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/add_recipe_ingredients_area"
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="3dp"
+        android:layout_below="@id/add_recipe_add_ing"
+        android:background="@color/tintedBackground">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/add_recipe_ingredients_content">
+            </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:id="@+id/add_recipe_add_step_text"
+        android:layout_marginLeft="18dp"
+        android:layout_below="@id/add_recipe_ingredients_area"
+        android:textSize="18sp"
+        android:text="Steps"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add"
+        android:layout_below="@id/add_recipe_ingredients_area"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="18dp"
+        android:id="@+id/add_recipe_add_step"/>
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/add_recipe_step_area"
+        android:layout_width="match_parent"
+        android:layout_height="175dp"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="3dp"
+        android:layout_below="@id/add_recipe_add_step"
+        android:background="@color/tintedBackground">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/add_recipe_steps_content">
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_recipe_step_area"
+        android:layout_marginLeft="18dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="3dp"
+        android:textSize="18sp"
+        android:text="Rating"
+        android:id="@+id/add_recipe_ratingtext"/>
+    <RatingBar
+        android:id="@+id/add_recipe_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="18dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"
+        android:layout_toRightOf="@id/add_recipe_ratingtext"
+        android:layout_below="@id/add_recipe_step_area"
+        android:rating="0" />
+    <Button
+        android:id="@+id/add_recipe_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_recipe_rating"
+        android:layout_marginRight="18dp"
+        android:layout_marginLeft="18dp"
         android:backgroundTint="@color/colorAccent"
         android:textColor="@color/white"
         android:text="Save" />
-</LinearLayout>
+</RelativeLayout>
+</ScrollView>
