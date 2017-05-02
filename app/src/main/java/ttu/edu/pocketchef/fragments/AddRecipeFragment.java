@@ -67,6 +67,7 @@ public class AddRecipeFragment extends Fragment {
                 EditText source = (EditText)v.findViewById(R.id.add_recipe_source);
                 RatingBar rating = (RatingBar)v.findViewById(R.id.add_recipe_rating);
                 LinearLayout ingredients = (LinearLayout)v.findViewById(R.id.add_recipe_ingredients_content);
+                LinearLayout steps = (LinearLayout)v.findViewById(R.id.add_recipe_steps_content);
 
                 if (name.getText().toString().equals("")) {
                     new AlertDialog.Builder(getContext())
@@ -112,10 +113,29 @@ public class AddRecipeFragment extends Fragment {
                         DB.getDB().insert("IngredientRecipe", null, values);
                     }
 
+                    for (int i = 0; i < steps.getChildCount(); i++) {
+                        ViewGroup child = (ViewGroup)steps.getChildAt(i);
+                        EditText stepDesc = (EditText)child.findViewById(R.id.add_step_ing_name);
+                        TextView stepCount = (TextView)child.findViewById(R.id.input_layout_step_count);
+                        values = new ContentValues();
+                        values.put("Description", stepDesc.getText().toString());
+                        values.put("RecipeID", id);
+                        // parse incase it decided to get out of order. Could have used "i + 1" instead.
+                        values.put("StepOrder", Integer.parseInt(stepCount.getText().toString()));
+
+                        DB.getDB().insert("Step", null, values);
+                    }
+
                     DB.dumpRecipes();
 
                     name.setText("");
                     desc.setText("");
+                    steps.removeAllViewsInLayout();
+                    source.setText("");
+                    source.setText("");
+                    cookTime.setText("");
+                    rating.setNumStars(0);
+                    ingredients.removeAllViewsInLayout();
                     orderInc = 1;
 
                     if (mListener != null) {

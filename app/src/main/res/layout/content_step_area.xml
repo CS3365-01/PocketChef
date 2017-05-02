@@ -28,7 +28,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/add_recipe_ing_name"
+            android:id="@+id/add_step_ing_name"
             android:hint="Step Description" />
     </android.support.design.widget.TextInputLayout>
 </LinearLayout>

@@ -86,6 +86,20 @@ public class DB {
             sb.append(isb.toString());
 
             sb.append("\n");
+
+            StringBuilder ssb = new StringBuilder();
+            Cursor s = getDB().rawQuery("SELECT * FROM Step WHERE RecipeID = " + c.getLong(c.getColumnIndex("ID")), null);
+            while (s.moveToNext()) {
+                for (String cname : s.getColumnNames()) {
+                    ssb.append(cname + ": " + s.getString(s.getColumnIndex(cname)) + " ");
+                }
+                ssb.append("\n\t");
+            }
+            s.close();
+
+            sb.append(ssb.toString());
+
+            sb.append("\n");
         }
         Log.i("RecipeTable", sb.toString());
         c.close();

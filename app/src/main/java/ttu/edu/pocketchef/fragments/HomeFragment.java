@@ -70,6 +70,15 @@ public class HomeFragment extends Fragment {
                 }
             });
 
+            title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (mListener != null) {
+                        mListener.onHomeFragmentInteraction(id);
+                    }
+                }
+            });
+
             //TextView title = (TextView)card.findViewById(R.id.home_card_title);
             title.setText(name);
             desc.setText(description);
@@ -156,6 +165,6 @@ public class HomeFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void onHomeFragmentInteraction();
+        void onHomeFragmentInteraction(long recipe);
     }
 }

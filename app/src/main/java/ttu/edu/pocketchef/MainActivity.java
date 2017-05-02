@@ -24,17 +24,20 @@ import ttu.edu.pocketchef.content.DB;
 import ttu.edu.pocketchef.fragments.AddRecipeFragment;
 import ttu.edu.pocketchef.fragments.HomeFragment;
 import ttu.edu.pocketchef.fragments.SearchFragment;
+import ttu.edu.pocketchef.fragments.ViewFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         HomeFragment.OnFragmentInteractionListener,
         SearchFragment.OnFragmentInteractionListener,
-        AddRecipeFragment.OnFragmentInteractionListener {
+        AddRecipeFragment.OnFragmentInteractionListener,
+        ViewFragment.OnFragmentInteractionListener {
 
     private ViewFlipper vf;
     private HomeFragment homeFragment;
     private AddRecipeFragment addRecipeFragment;
     private SearchFragment searchFragment;
+    private ViewFragment viewFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,11 @@ public class MainActivity extends AppCompatActivity
                 .replace(R.id.container_add_recipe, addRecipeFragment)
                 .commit();
 
+        viewFragment = new ViewFragment();
+        viewFragment.setArguments(new Bundle());
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container_view, viewFragment)
+                .commit();
 
         DB.create(getResources(), getApplicationContext().getCacheDir());
     }
@@ -128,13 +136,15 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onHomeFragmentInteraction() {
-
+    public void onHomeFragmentInteraction(long id) {
+        viewFragment.populateWithRecipe(id);
+        vf.setDisplayedChild(3);
     }
 
     @Override
-    public void onSearchFragmentInteraction() {
-
+    public void onSearchFragmentInteraction(long id) {
+        viewFragment.populateWithRecipe(id);
+        vf.setDisplayedChild(3);
     }
 
     @Override
@@ -142,5 +152,10 @@ public class MainActivity extends AppCompatActivity
         vf.setDisplayedChild(0);
 
         homeFragment.refreshHome();
+    }
+
+    @Override
+    public void onViewRecipeFragmentInteraction() {
+
     }
 }
