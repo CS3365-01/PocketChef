@@ -40,6 +40,9 @@ public class AddRecipeFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private int orderInc = 1;
     public static final String TIMERANGEPICKER_TAG = "timerangepicker";
+    private long idEdit = -1;
+    private View vv;
+    private LayoutInflater inf;
 
     public AddRecipeFragment() {
         // Required empty public constrctor
@@ -50,11 +53,96 @@ public class AddRecipeFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    public void populateWithRecipe(long id) {
+        idEdit = id;
+
+        EditText name = (EditText) vv.findViewById(R.id.add_recipe_name);
+        EditText desc = (EditText) vv.findViewById(R.id.add_recipe_description);
+        EditText cookTime = (EditText) vv.findViewById(R.id.add_recipe_cooktime);
+        EditText source = (EditText) vv.findViewById(R.id.add_recipe_source);
+        RatingBar rating = (RatingBar) vv.findViewById(R.id.add_recipe_rating);
+        LinearLayout ingredients = (LinearLayout) vv.findViewById(R.id.add_recipe_ingredients_content);
+        LinearLayout steps = (LinearLayout) vv.findViewById(R.id.add_recipe_steps_content);
+
+        String selectQuery = "SELECT * FROM Recipe WHERE ID = " + id;
+        Cursor c = DB.getDB().rawQuery(selectQuery, null);
+        while (c.moveToNext()) {
+            String rawName = c.getString(c.getColumnIndex("Name"));
+            String rawDescription = c.getString(c.getColumnIndex("Description"));
+            String rawCookTime = c.getString(c.getColumnIndex("CookTime"));
+            String rawSource = c.getString(c.getColumnIndex("Source"));
+            int rawRating = c.getInt(c.getColumnIndex("Rating"));
+
+            desc.setText(rawDescription);
+            name.setText(rawName);
+            cookTime.setText(rawCookTime);
+            source.setText(rawSource);
+            rating.setNumStars(rawRating);
+        }
+        c.close();
+
+        ArrayList<String> ings = new ArrayList<String>();
+        selectQuery = "SELECT * FROM Ingredient";
+        c = DB.getDB().rawQuery(selectQuery, null);
+        while (c.moveToNext()) {
+            String name2 = c.getString(c.getColumnIndex("Name"));
+            ings.add(name2);
+        }
+        c.close();
+        String[] ingsa = ings.toArray(new String[ings.size()]);
+
+        selectQuery = "SELECT * FROM IngredientRecipe WHERE RecipeID = " + id;
+        c = DB.getDB().rawQuery(selectQuery, null);
+        while (c.moveToNext()) {
+            int ingID = c.getInt(c.getColumnIndex("IngredientID"));
+            String amount = c.getString(c.getColumnIndex("Amount"));
+            String ingName = "";
+
+            Cursor c2 = DB.getDB().rawQuery("SELECT * FROM Ingredient WHERE ID = " + ingID, null);
+            while (c2.moveToNext()) {
+                ingName = c2.getString(c2.getColumnIndex("Name"));
+            }
+            c2.close();
+
+            ViewGroup row = (ViewGroup) inf.inflate(R.layout.content_ingredient_area, null);
+
+            AutoCompleteTextView ing = (AutoCompleteTextView) row.findViewById(R.id.add_recipe_ing_name);
+            ArrayAdapter<String> adapter =
+                    new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, ingsa);
+            ing.setAdapter(adapter);
+            ing.setText(ingName);
+            ((EditText)row.findViewById(R.id.add_recipe_ing_am)).setText(amount);
+
+            ingredients.addView(row);
+        }
+        c.close();
+
+        selectQuery = "SELECT * FROM Step WHERE RecipeID = " + id;
+        c = DB.getDB().rawQuery(selectQuery, null);
+        while (c.moveToNext()) {
+            int orderi = c.getInt(c.getColumnIndex("StepOrder"));
+            String descRaw = c.getString(c.getColumnIndex("Description"));
+
+            ViewGroup row = (ViewGroup) inf.inflate(R.layout.content_step_area, null);
+
+            TextView order = (TextView)row.findViewById(R.id.input_layout_step_count);
+            order.setText("" + orderi);
+
+            EditText descs = (EditText)row.findViewById(R.id.add_step_ing_name);
+            descs.setText(descRaw);
+
+            steps.addView(row);
+        }
+        c.close();
+    }
+
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_add_recipe, container, false);
+        vv = v;
+        inf = inflater;
         final View d = inflater.inflate(R.layout.fragment_add_recipe, container, false);
 
         Button b = (Button)v.findViewById(R.id.add_recipe_save);
@@ -83,8 +171,18 @@ public class AddRecipeFragment extends Fragment {
                     values.put("CookTime", cookTime.getText().toString());
                     values.put("Source", source.getText().toString());
                     values.put("Rating", rating.getNumStars());
-                    long id = DB.getDB().insert("Recipe", null, values);
+                    long id = idEdit;
+                    if (id != -1) {
+                        values.put("ID", id);
+                        DB.getDB().replace("Recipe", null, values);
+                    } else {
+                        id = DB.getDB().insert("Recipe", null, values);
+                    }
                     Log.i("db", id + " id ");
+
+                    if (idEdit != -1) {
+                        DB.getDB().execSQL("DELETE FROM IngredientRecipe WHERE RecipeID = " + idEdit);
+                    }
 
                     for (int i = 0; i < ingredients.getChildCount(); i++) {
                         ViewGroup child = (ViewGroup)ingredients.getChildAt(i);
@@ -113,6 +211,10 @@ public class AddRecipeFragment extends Fragment {
                         DB.getDB().insert("IngredientRecipe", null, values);
                     }
 
+                    if (idEdit != -1) {
+                        DB.getDB().execSQL("DELETE FROM Step WHERE RecipeID = " + idEdit);
+                    }
+
                     for (int i = 0; i < steps.getChildCount(); i++) {
                         ViewGroup child = (ViewGroup)steps.getChildAt(i);
                         EditText stepDesc = (EditText)child.findViewById(R.id.add_step_ing_name);
@@ -137,6 +239,7 @@ public class AddRecipeFragment extends Fragment {
                     rating.setNumStars(0);
                     ingredients.removeAllViewsInLayout();
                     orderInc = 1;
+                    idEdit = -1;
 
                     if (mListener != null) {
                         mListener.onAddRecipeFragmentInteraction(true);

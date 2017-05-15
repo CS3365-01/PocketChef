@@ -42,7 +42,6 @@
             android:orientation="vertical"
             android:id="@+id/search_card_area"
             android:padding="5dp">
-            <include layout="@layout/card_home" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

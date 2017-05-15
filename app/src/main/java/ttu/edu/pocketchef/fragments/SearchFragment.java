@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import ttu.edu.pocketchef.R;
 import ttu.edu.pocketchef.content.DB;
+import ttu.edu.pocketchef.content.RecipeViewKind;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -63,8 +64,10 @@ public class SearchFragment extends Fragment {
         LinearLayout llmain = (LinearLayout)v.findViewById(R.id.search_card_area);
         llmain.removeAllViewsInLayout();
 
-        if (query == null || query.isEmpty())
+        if (query == null || query.isEmpty()) {
+            llmain.invalidate();
             return;
+        }
 
         query = query.replace("'", "''");
 
@@ -92,7 +95,7 @@ public class SearchFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     if (mListener != null) {
-                        mListener.onSearchFragmentInteraction(id);
+                        mListener.onSearchFragmentInteraction(id, RecipeViewKind.VIEW);
                     }
                 }
             });
@@ -104,6 +107,8 @@ public class SearchFragment extends Fragment {
             llmain.addView(card);
         }
         c.close();
+
+        llmain.invalidate();
     }
 
     public void showPopup(FloatingActionButton menuItemView, final int id){
@@ -129,6 +134,10 @@ public class SearchFragment extends Fragment {
                                 })
                                 .setNegativeButton("No", null)
                                 .show();
+
+                        return true;
+                    case R.id.home_menu_edit:
+                        mListener.onSearchFragmentInteraction(id, RecipeViewKind.EDIT);
 
                         return true;
                     default:
@@ -169,6 +178,6 @@ public class SearchFragment extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onSearchFragmentInteraction(long id);
+        void onSearchFragmentInteraction(long id, RecipeViewKind kind);
     }
 }

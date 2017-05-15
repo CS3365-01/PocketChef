@@ -24,6 +24,7 @@ import java.util.zip.Inflater;
 
 import ttu.edu.pocketchef.R;
 import ttu.edu.pocketchef.content.DB;
+import ttu.edu.pocketchef.content.RecipeViewKind;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -74,7 +75,7 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     if (mListener != null) {
-                        mListener.onHomeFragmentInteraction(id);
+                        mListener.onHomeFragmentInteraction(id, RecipeViewKind.VIEW);
                     }
                 }
             });
@@ -113,6 +114,9 @@ public class HomeFragment extends Fragment {
                                 .setNegativeButton("No", null)
                                 .show();
 
+                        return true;
+                    case R.id.home_menu_edit:
+                        mListener.onHomeFragmentInteraction(id, RecipeViewKind.EDIT);
                         return true;
                     default:
                         return false;
@@ -165,6 +169,6 @@ public class HomeFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        void onHomeFragmentInteraction(long recipe);
+        void onHomeFragmentInteraction(long recipe, RecipeViewKind kind);
     }
 }

@@ -21,6 +21,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 
 import ttu.edu.pocketchef.content.DB;
+import ttu.edu.pocketchef.content.RecipeViewKind;
 import ttu.edu.pocketchef.fragments.AddRecipeFragment;
 import ttu.edu.pocketchef.fragments.HomeFragment;
 import ttu.edu.pocketchef.fragments.SearchFragment;
@@ -136,15 +137,25 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onHomeFragmentInteraction(long id) {
-        viewFragment.populateWithRecipe(id);
-        vf.setDisplayedChild(3);
+    public void onHomeFragmentInteraction(long id, RecipeViewKind kind) {
+        if (kind == RecipeViewKind.VIEW) {
+            viewFragment.populateWithRecipe(id);
+            vf.setDisplayedChild(3);
+        } else {
+            addRecipeFragment.populateWithRecipe(id);
+            vf.setDisplayedChild(2);
+        }
     }
 
     @Override
-    public void onSearchFragmentInteraction(long id) {
-        viewFragment.populateWithRecipe(id);
-        vf.setDisplayedChild(3);
+    public void onSearchFragmentInteraction(long id, RecipeViewKind kind) {
+        if (kind == RecipeViewKind.VIEW) {
+            viewFragment.populateWithRecipe(id);
+            vf.setDisplayedChild(3);
+        } else {
+            addRecipeFragment.populateWithRecipe(id);
+            vf.setDisplayedChild(2);
+        }
     }
 
     @Override
